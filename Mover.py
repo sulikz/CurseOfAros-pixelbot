@@ -1,8 +1,11 @@
+import queue
 import random
 import time
 
 import pyautogui
 
+import Attacker
+from Attacker import *
 from Coordinates import use_box_coords
 
 
@@ -32,7 +35,7 @@ def move_up(t, release=True):
     time.sleep(t)
     if release:
         pyautogui.keyUp("w")
-    # print("up {}".format(t))
+    print("up {}".format(t))
 
 
 def move_down(t, release=True):
@@ -40,7 +43,7 @@ def move_down(t, release=True):
     time.sleep(t)
     if release:
         pyautogui.keyUp("s")
-    # print("down {}".format(t))
+    print("down {}".format(t))
 
 
 def move_left(t, release=True):
@@ -48,7 +51,7 @@ def move_left(t, release=True):
     time.sleep(t)
     if release:
         pyautogui.keyUp("a")
-    # print("left {}".format(t))
+    print("left {}".format(t))
 
 
 def move_right(t, release=True):
@@ -56,7 +59,7 @@ def move_right(t, release=True):
     time.sleep(t)
     if release:
         pyautogui.keyUp("d")
-    # print("right {}".format(t))
+    print("right {}".format(t))
 
 
 def bank_to_anvil():
@@ -208,10 +211,6 @@ def coal_to_bank():
     pyautogui.keyUp("w")
 
 
-def gold_to_bank():
-    pass
-
-
 def bank_to_gold():
     r = random.uniform(0, 0.5)
     move_left(3 - r, release=False)
@@ -278,4 +277,28 @@ def bank_to_mythan():
     move_left(2.1)
     move_down(2.1)
 
+
+last_p = None
+positions = queue.Queue(10)
+
+
+def anti_stuck():
+    last_p = Attacker.last_pos()
+    if positions.full():
+        positions.get()
+        positions.put(last_p)
+        array = np.asarray(positions.queue)
+        if (last_p == array).all():
+            print("stuck")
+            r = random.randrange(0, 4)
+            if r == 0:
+                move_right(0.3)
+            elif r == 1:
+                move_up(0.3)
+            elif r == 2:
+                move_left(0.3)
+            elif r == 3:
+                move_down(0.3)
+    else:
+        positions.put(last_p)
 

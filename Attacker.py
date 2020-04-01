@@ -9,19 +9,20 @@ from PIL import ImageGrab
 from CheckBox import check_box
 from Coordinates import *
 from Mover import move_left, move_right, move_down, move_up
+import Player
 
 
-def attack(color, max_distance=120, offset=0):
+def attack(*color, max_distance=120, min_distance=50, offset=0):
     # Look for color of enemy
-    enemy_coords = search_for_color(color, small_search_box_coords, 15)
+    enemy_coords = search_for_color(*color, attack_box=small_search_box_coords)
     if not enemy_coords:
-        pyautogui.hotkey("w", "s", "a", "d")
-        pyautogui.mouseUp()
-
-    while not enemy_coords:
-        enemy_coords = search_for_color(color, search_box_coords, step=50)
-        if check_if_dead():
+        enemy_coords = search_for_color(*color, attack_box=search_box_coords)
+        if not enemy_coords:
             return False
+        if Player.check_if_dead():
+            return False
+    else:
+        Player.attack()
     dist_x = player_coords[0] - enemy_coords[0]
     dist_y = player_coords[1] - enemy_coords[1] - offset
     abs_x = abs(player_coords[0] - enemy_coords[0])
@@ -32,76 +33,75 @@ def attack(color, max_distance=120, offset=0):
     if distance > max_distance:
         move_to(distance, direction, abs_x, abs_y)
 
-        pyautogui.mouseDown(attack_box_coords[0], attack_box_coords[1])
-    else:
-        pyautogui.mouseDown(attack_box_coords[0], attack_box_coords[1])
-        pyautogui.hotkey("w", "s", "a", "d")
+    elif distance > min_distance:
         turn_to(direction, abs_x, abs_y)
-    #     print("Quitting...")
-    #     sys.exit()
+
+    pyautogui.hotkey("w", "s", "a", "d")
+    return True
 
 
 def move_to(distance, direction, abs_x, abs_y):
+    t = 1
     if direction == "NW":
         if abs_x > abs_y:
             if abs_y < 150:
                 pyautogui.keyDown("a")
-                time.sleep(distance / 400 * 0.6)
+                time.sleep(distance / 400 * t)
                 return True
         else:
             if abs_x < 150:
                 pyautogui.keyDown("w")
-                time.sleep(distance / 300 * 0.6)
+                time.sleep(distance / 300 * t)
                 return True
         pyautogui.keyDown("w")
         pyautogui.keyDown("a")
-        time.sleep(distance / 350 * 0.8)
+        time.sleep(distance / 350 * t)
     if direction == "NE":
         if abs_x > abs_y:
             if abs_y < 150:
                 pyautogui.keyDown("d")
-                time.sleep(distance / 400 * 0.6)
+                time.sleep(distance / 400 * t)
                 return True
         else:
             if abs_x < 150:
                 pyautogui.keyDown("w")
-                time.sleep(distance / 300 * 0.6)
+                time.sleep(distance / 300 * t)
                 return True
         pyautogui.keyDown("w")
         pyautogui.keyDown("d")
-        time.sleep(distance / 350 * 0.8)
+        time.sleep(distance / 350 * t)
     if direction == "SW":
         if abs_x > abs_y:
             if abs_y < 150:
                 pyautogui.keyDown("a")
-                time.sleep(distance / 300 * 0.6)
+                time.sleep(distance / 300 * t)
                 return True
         else:
             if abs_x < 150:
                 pyautogui.keyDown("s")
-                time.sleep(distance / 400 * 0.6)
+                time.sleep(distance / 400 * t)
                 return True
         pyautogui.keyDown("s")
         pyautogui.keyDown("a")
-        time.sleep(distance / 350 * 0.6)
+        time.sleep(distance / 350 * t)
     if direction == "SE":
         if abs_x > abs_y:
             if abs_y < 150:
                 pyautogui.keyDown("d")
-                time.sleep(distance / 400 * 0.6)
+                time.sleep(distance / 400 * t)
                 return True
         else:
             if abs_x < 150:
                 pyautogui.keyDown("s")
-                time.sleep(distance / 300 * 0.6)
+                time.sleep(distance / 300 * t)
                 return True
         pyautogui.keyDown("s")
         pyautogui.keyDown("d")
-        time.sleep(distance / 350 * 0.6)
+        time.sleep(distance / 350 * t)
 
 
 def turn_to(direction, abs_x, abs_y):
-    t = 0.1
+    t = random.uniform(0, 0.1)
     if direction == "NW":
         if abs_x > abs_y:
             move_left(t)
@@ -137,46 +137,20 @@ def check_dir(dist_x, dist_y):
     # if dist_x > 0 : W  || if dist_x < 0 : E
 
 
-def search_for_color(color, attack_box, step=10):
-    img = np.asarray(ImageGrab.grab(attack_box).convert('RGB'))
-    color = np.asarray(color)
-    result = np.where(np.all(img == color, axis=-1))
-    if len(result[0] != 0):
-        x, y = result[1][0] + attack_box[0], result[0][0] + attack_box[1]
-        return x, y
-    else:
-        return False
-
-
-def check_if_dead():
-    img = np.array(ImageGrab.grab(player_dead_coords).convert('RGB'))
-    r, g, b = img[0][0]
-    if r == 255 and g == 0 and b == 0:
-        print("Player died")
-        return True
-    else:
-        return False
-
-
-def check_if_hp(percent):
-    # HP = x <350, 850>
-    x = (percent * 500 / 100) + 350
-    y = 133
-    img = np.array(ImageGrab.grab((x, y, x + 1, y + 1)).convert('RGB'))
-    r, g, b = img[0][0]
-    if r == 123 and g == 101 and b == 82:
-        return True
-    else:
-        return False
-
-
-def drink_potion(potion):
-    pyautogui.click(potion[0], potion[1])
+def search_for_color(*color, attack_box):
+    for c in color:
+        img = np.asarray(ImageGrab.grab(attack_box).convert('RGB'))
+        c = np.asarray(c)
+        result = np.where(np.all(img == c, axis=-1))
+        if len(result[0] != 0):
+            x, y = result[1][0] + attack_box[0], result[0][0] + attack_box[1]
+            return x, y
+    return False
 
 
 def auto_heal(percent, potion):
-    while check_if_hp(percent):
-        drink_potion(potion)
+    while Player.check_if_hp(percent):
+        Player.drink_potion(potion)
 
 
 def auto_loot(*items):
@@ -185,9 +159,6 @@ def auto_loot(*items):
             pyautogui.click(use_coords)
 
 
-def anti_stuck(last_pos):
+def last_pos():
     img = np.array(ImageGrab.grab(anti_stuck_coords).convert('RGB'))
-    if (last_pos == img).all():
-        return False
-    else:
-        return img
+    return img

@@ -1,10 +1,7 @@
-import random
 from threading import Thread
 
-from Mover import bank_to_gold, spawn_to_bank, Mover, bank_to_mythan
-from config import *
 from Potion import Potion
-import multiprocessing as mp
+from config import *
 
 
 def full_auto_farm(mob):
@@ -12,6 +9,14 @@ def full_auto_farm(mob):
     Thread(target=auto_heal(random.uniform(60, 85), Potion.medium.value)).start()
     Thread(target=auto_heal(25, Potion.large.value)).start()
     Thread(target=attack(mob, 120, offset=50)).start()
+
+
+def farm_rock_fiends():
+    Thread(target=Player.use_item()).start()
+    Thread(target=auto_heal(random.uniform(60, 85), Potion.medium.value)).start()
+    Thread(target=auto_heal(25, Potion.large.value)).start()
+    # Thread(target=attack(rock_fiend, rock_fiend_hit, 140, offset=50)).start()
+    attack(rock_fiend, rock_fiend_hit, 140, offset=50)
 
 
 def farm_ice_fiends():
@@ -22,10 +27,11 @@ def farm_ice_fiends():
 
 
 def farm_cave_bats():
-    Thread(target=auto_loot(Loot.MediumPotion.value, Loot.LargePotion.value)).start()
+    Thread(target=Player.use_item()).start()
     Thread(target=auto_heal(random.uniform(45, 75), Potion.medium.value)).start()
     Thread(target=auto_heal(25, Potion.large.value)).start()
-    Thread(target=attack(cave_bat_color, 140, offset=80)).start()
+    # Thread(target=attack(cave_bat_color, 140, offset=80)).start()
+    attack(cave_bat_color, 140, offset=100)
 
 
 def farm_forest_fiends():
@@ -39,7 +45,7 @@ def mine_mythan():
     full_inventory, ore_depleted = miner(Ores.Mythan.value)
     if full_inventory:
         # Suicide
-        while not check_if_dead():
+        while not Player.check_if_dead():
             print("Suciding...")
             attack(rock_fiend, 140)
         pyautogui.mouseUp()
@@ -63,7 +69,7 @@ def mine_gold(m: Mover):
 
     if full_inventory:
         # Suicide
-        while not check_if_dead():
+        while not Player.check_if_dead():
             print("Suciding...")
             attack(raptor_color, 140)
             pyautogui.hotkey("w", "s", "a", "d")

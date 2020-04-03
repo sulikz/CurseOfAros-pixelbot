@@ -279,7 +279,7 @@ def bank_to_mythan():
 
 
 last_p = None
-positions = queue.Queue(10)
+positions = queue.Queue(2)
 
 
 def anti_stuck():

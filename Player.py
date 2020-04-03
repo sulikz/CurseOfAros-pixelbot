@@ -1,3 +1,5 @@
+import time
+
 import numpy as np
 import pyautogui
 from PIL import ImageGrab
@@ -5,15 +7,20 @@ from Coordinates import *
 
 
 def attack():
-    pyautogui.click(attack_box_coords[0], attack_box_coords[1])
+    pyautogui.hotkey('q')
 
 
 def use_item():
-    pyautogui.click(use_box_coords[0], use_box_coords[1])
+    pyautogui.hotkey('e')
 
 
 def drink_potion(potion):
-    pyautogui.click(potion[0], potion[1])
+    if potion == 1:
+        pyautogui.hotkey('1')
+    if potion == 2:
+        pyautogui.hotkey('2')
+    if potion == 3:
+        pyautogui.hotkey('3')
 
 
 def check_if_dead():
@@ -37,3 +44,13 @@ def check_if_hp(percent):
     else:
         return False
 
+
+def check_if_exp():
+    img = np.array(ImageGrab.grab(player_exp_coords).convert('RGB'))
+    yellow = np.asarray((255, 255, 0))
+    result = np.where(np.all(img == yellow, axis=-1))
+    if len(result[0] != 0):
+            print('killed')
+            return True
+    else:
+        return False

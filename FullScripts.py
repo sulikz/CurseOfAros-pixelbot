@@ -1,44 +1,55 @@
 from threading import Thread
-
 from Potion import Potion
 from config import *
 
 
 def full_auto_farm(mob):
-    Thread(target=auto_loot(Loot.MediumPotion.value, Loot.LargePotion.value)).start()
-    Thread(target=auto_heal(random.uniform(60, 85), Potion.medium.value)).start()
-    Thread(target=auto_heal(25, Potion.large.value)).start()
-    Thread(target=attack(mob, 120, offset=50)).start()
-
-
-def farm_rock_fiends():
-    Thread(target=Player.use_item()).start()
-    Thread(target=auto_heal(random.uniform(60, 85), Potion.medium.value)).start()
-    Thread(target=auto_heal(25, Potion.large.value)).start()
-    # Thread(target=attack(rock_fiend, rock_fiend_hit, 140, offset=50)).start()
-    attack(rock_fiend, rock_fiend_hit, 140, offset=50)
-
-
-def farm_ice_fiends():
-    Thread(target=auto_loot(Loot.MediumPotion.value, Loot.LargePotion.value, Loot.GlacialBlade.value)).start()
-    Thread(target=auto_heal(random.uniform(60, 85), Potion.medium.value)).start()
-    Thread(target=auto_heal(25, Potion.large.value)).start()
-    Thread(target=attack(ice_fiend_color, 120, offset=50)).start()
+    auto_loot(Loot.MediumPotion.value, Loot.LargePotion.value)
+    auto_heal(random.uniform(60, 85), Potion.medium.value)
+    auto_heal(25, Potion.large.value)
+    attack(mob, 120, offset=50)
 
 
 def farm_cave_bats():
-    Thread(target=Player.use_item()).start()
-    Thread(target=auto_heal(random.uniform(45, 75), Potion.medium.value)).start()
-    Thread(target=auto_heal(25, Potion.large.value)).start()
-    # Thread(target=attack(cave_bat_color, 140, offset=80)).start()
+    Player.use_item()
+    auto_heal(random.uniform(45, 75), Potion.medium.value)
+    auto_heal(25, Potion.large.value)
     attack(cave_bat_color, 140, offset=100)
 
 
+def farm_ancient_bats():
+    Player.use_item()
+    auto_heal(35, Potion.large.value)
+    auto_heal(random.uniform(45, 75), Potion.medium.value)
+    attack(ancient_bat_hit_1,
+           ancient_bat_hit_2,
+           ancient_bat_1,
+           ancient_bat_hit_2,
+           max_distance=140,
+           min_distance=80,
+           offset=80,
+           search_box=ancient_bat_search_coords)
+
+
 def farm_forest_fiends():
-    Thread(target=auto_loot(Loot.MediumPotion.value, Loot.LargePotion.value)).start()
-    Thread(target=auto_heal(random.uniform(60, 85), Potion.medium.value)).start()
-    Thread(target=auto_heal(25, Potion.large.value)).start()
-    Thread(target=attack(forest_fiend, 80, offset=80)).start()
+    auto_loot(Loot.MediumPotion.value, Loot.LargePotion.value)
+    auto_heal(random.uniform(60, 85), Potion.medium.value)
+    auto_heal(25, Potion.large.value)
+    attack(forest_fiend, 80, offset=80)
+
+
+def farm_rock_fiends():
+    Player.use_item()
+    auto_heal(25, Potion.large.value)
+    auto_heal(random.uniform(50, 75), Potion.medium.value)
+    attack(rock_fiend, rock_fiend_hit, 140, min_distance=80, offset=50)
+
+
+def farm_ice_fiends():
+    Player.use_item()
+    auto_heal(25, Potion.large.value)
+    auto_heal(random.uniform(50, 75), Potion.medium.value)
+    attack(ice_fiend_color, 100, min_distance=60, offset=50)
 
 
 def mine_mythan():

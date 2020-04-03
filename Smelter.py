@@ -71,11 +71,12 @@ def smelt_steel(bar_smelter_icon, bar_inventory_icon, ore_1, quantity_1, ore_2=N
 
 def smelt_item(item, wait_time):
     # Open up smelter when available
+    time.sleep(random.uniform(0.3, 0.4))
     if check_box(UI.Smelt.value, use_box_coords):
         pyautogui.click(use_coords)
 
         # Choose bar to smelt
-        time.sleep(random.uniform(0.3, 0.4))
+        time.sleep(random.uniform(0.5, 0.8))
         click_item(item, 1, make_items_box_coords)
 
         # Choose quantity

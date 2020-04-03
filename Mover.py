@@ -2,11 +2,11 @@ import queue
 import random
 import time
 
+import numpy as np
 import pyautogui
+from PIL import ImageGrab
 
-import Attacker
-from Attacker import *
-from Coordinates import use_box_coords
+from Coordinates import use_box_coords, anti_stuck_coords
 
 
 class Mover:
@@ -283,7 +283,7 @@ positions = queue.Queue(10)
 
 
 def anti_stuck():
-    last_p = Attacker.last_pos()
+    last_p = last_pos()
     if positions.full():
         positions.get()
         positions.put(last_p)
@@ -302,3 +302,7 @@ def anti_stuck():
     else:
         positions.put(last_p)
 
+
+def last_pos():
+    img = np.array(ImageGrab.grab(anti_stuck_coords).convert('RGB'))
+    return img

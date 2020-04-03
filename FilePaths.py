@@ -2,10 +2,11 @@ import enum
 import os
 
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
-ORE_PATH = os.path.join(ROOT_DIR, r'Ores')
-UI_PATH = os.path.join(ROOT_DIR, r'UI')
-ICON_PATH = os.path.join(ROOT_DIR, r'ItemIcons')
-LOOT_PATH = os.path.join(ROOT_DIR, r'Loot')
+IMG_DIR = os.path.join(ROOT_DIR, r'Images')
+ORE_PATH = os.path.join(IMG_DIR, r'Ores')
+UI_PATH = os.path.join(IMG_DIR, r'UI')
+ICON_PATH = os.path.join(IMG_DIR, r'ItemIcons')
+LOOT_PATH = os.path.join(IMG_DIR, r'Loot')
 
 
 class Loot(enum.Enum):

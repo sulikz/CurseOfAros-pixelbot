@@ -8,7 +8,6 @@ from Banker import click_item, withdraw_item, close_bank, store_item
 from CheckBox import check_box
 from Coordinates import *
 from FilePaths import *
-from Mover import *
 
 
 def forge_item(item):

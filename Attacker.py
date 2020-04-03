@@ -1,5 +1,4 @@
 import random
-import sys
 import time
 
 import numpy as np
@@ -12,7 +11,7 @@ from Mover import move_left, move_right, move_down, move_up
 import Player
 
 
-def attack(*color, max_distance=120, min_distance=50, offset=0):
+def attack(*color, max_distance=120, min_distance=50, offset=0, search_box = search_box_coords):
     # Look for color of enemy
     enemy_coords = search_for_color(*color, attack_box=small_search_box_coords)
     if not enemy_coords:
@@ -32,8 +31,13 @@ def attack(*color, max_distance=120, min_distance=50, offset=0):
     direction = check_dir(dist_x, dist_y)
     if distance > max_distance:
         move_to(distance, direction, abs_x, abs_y)
+        # pyautogui.moveTo(player_coords[0], player_coords[1], duration=0.0)
+        # pyautogui.mouseDown(button="right")
+        # pyautogui.dragTo(enemy_coords[0], enemy_coords[1], duration=2,button="right")
+        # pyautogui.click(button="right")
+        # pyautogui.moveTo(300,815)
 
-    elif distance > min_distance:
+    elif max_distance > distance > min_distance:
         turn_to(direction, abs_x, abs_y)
 
     pyautogui.hotkey("w", "s", "a", "d")
@@ -41,7 +45,7 @@ def attack(*color, max_distance=120, min_distance=50, offset=0):
 
 
 def move_to(distance, direction, abs_x, abs_y):
-    t = 1
+    t = 0.8
     if direction == "NW":
         if abs_x > abs_y:
             if abs_y < 150:
@@ -101,7 +105,7 @@ def move_to(distance, direction, abs_x, abs_y):
 
 
 def turn_to(direction, abs_x, abs_y):
-    t = random.uniform(0, 0.1)
+    t = random.uniform(0, 0.05)
     if direction == "NW":
         if abs_x > abs_y:
             move_left(t)
@@ -141,8 +145,9 @@ def search_for_color(*color, attack_box):
     for c in color:
         img = np.asarray(ImageGrab.grab(attack_box).convert('RGB'))
         c = np.asarray(c)
-        result = np.where(np.all(img == c, axis=-1))
+        result = np.where(np.all(img == c, axis=2))
         if len(result[0] != 0):
+            print("not found")
             x, y = result[1][0] + attack_box[0], result[0][0] + attack_box[1]
             return x, y
     return False
@@ -159,6 +164,4 @@ def auto_loot(*items):
             pyautogui.click(use_coords)
 
 
-def last_pos():
-    img = np.array(ImageGrab.grab(anti_stuck_coords).convert('RGB'))
-    return img
+

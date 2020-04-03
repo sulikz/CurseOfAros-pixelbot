@@ -14,31 +14,23 @@ class Bot(Thread):
         self.start()
 
     def run(self):
-        # use_box = ImageGrab.grab(use_box_coords)
+        # use_box = ImageGrab.grab(small_search_box_coords)
         # use_box.show()
-        # bank_to_gold()
+        # bank_to_gold()q
         while True:
             if keyboard.is_pressed('f1') and not self.running:
                 self.running = True
                 time.sleep(0.5)
             while self.running:
-                if keyboard.is_pressed('f1') and self.running:
-                    self.running = False
-                    time.sleep(0.5)
                 # Auto attacker
-                # time.sleep(random.uniform(0.1, 0.3))
-                farm_rock_fiends()
+                # farm_rock_fiends()
+                # farm_luminant_slimes()
                 # farm_cave_bats()
+                farm_ice_raptors()
                 # farm_ancient_bats()
                 # farm_ice_fiends()
-                anti_stuck()
                 # farm_cave_bats()
 
-                # pyautogui.keyDown("space")
-                # pyautogui.keyUp("space")
-                # auto_heal(60, Potion.medium.value)
-
-                # Anti stuck
                 # anti_stuck()
                 # mine_gold(self.m)
                 # mine_mythan()
@@ -46,6 +38,11 @@ class Bot(Thread):
                 # Auto smelt
                 # smelt_gold_nuggets()
                 # smelt_gold_bar()
+                if Player.check_if_dead():
+                    self.running = False
+                if keyboard.is_pressed('f1') and self.running:
+                    self.running = False
+                    time.sleep(0.5)
 
     def toggle_run(self):
         if self.running:

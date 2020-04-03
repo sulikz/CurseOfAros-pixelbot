@@ -7,40 +7,59 @@ from PIL import ImageGrab
 
 from CheckBox import check_box
 from Coordinates import *
-from Mover import move_left, move_right, move_down, move_up
+from Mover import move_left, move_right, move_down, move_up, anti_stuck
 import Player
+from Potion import Potion
 
 
-def attack(*color, max_distance=120, min_distance=50, offset=0, search_box = search_box_coords):
+def single_enemy_farmer(color, max_distance=100, min_distance=80, offset=0, small_search_box=small_search_box_coords,
+                        search_box=search_box_coords):
+    i = 0
+    while i < 7:
+        if attack(color,
+                  max_distance=max_distance,
+                  min_distance=min_distance,
+                  offset=offset,
+                  search_box=small_search_box):
+            pyautogui.keyDown('q')
+            i = 0
+        Player.use_item()
+        auto_heal(35, Potion.large.value)
+        auto_heal(random.uniform(50, 75), Potion.medium.value)
+        i += 1
+        print(i)
+    anti_stuck()
+    pyautogui.keyUp('q')
+    Player.use_item()
+    auto_heal(35, Potion.large.value)
+    auto_heal(random.uniform(50, 75), Potion.medium.value)
+    attack(color,
+           max_distance=max_distance,
+           min_distance=min_distance,
+           offset=offset,
+           search_box=search_box)
+    Player.use_item()
+
+
+def attack(*color, max_distance=120, min_distance=50, offset=0, search_box=search_box_coords):
     # Look for color of enemy
-    enemy_coords = search_for_color(*color, attack_box=small_search_box_coords)
+    enemy_coords = search_for_color(*color, attack_box=search_box)
     if not enemy_coords:
-        enemy_coords = search_for_color(*color, attack_box=search_box_coords)
-        if not enemy_coords:
-            return False
-        if Player.check_if_dead():
-            return False
+        return False
     else:
-        Player.attack()
-    dist_x = player_coords[0] - enemy_coords[0]
-    dist_y = player_coords[1] - enemy_coords[1] - offset
-    abs_x = abs(player_coords[0] - enemy_coords[0])
-    abs_y = abs(player_coords[1] - enemy_coords[1])
+        dist_x = player_coords[0] - enemy_coords[0]
+        dist_y = player_coords[1] - enemy_coords[1] - offset
+        abs_x = abs(player_coords[0] - enemy_coords[0])
+        abs_y = abs(player_coords[1] - enemy_coords[1])
 
-    distance = np.sqrt(pow(dist_x, 2) + pow(dist_y, 2))
-    direction = check_dir(dist_x, dist_y)
-    if distance > max_distance:
-        move_to(distance, direction, abs_x, abs_y)
-        # pyautogui.moveTo(player_coords[0], player_coords[1], duration=0.0)
-        # pyautogui.mouseDown(button="right")
-        # pyautogui.dragTo(enemy_coords[0], enemy_coords[1], duration=2,button="right")
-        # pyautogui.click(button="right")
-        # pyautogui.moveTo(300,815)
+        distance = np.sqrt(pow(dist_x, 2) + pow(dist_y, 2))
+        direction = check_dir(dist_x, dist_y)
+        if distance > max_distance:
+            move_to(distance, direction, abs_x, abs_y)
 
-    elif max_distance > distance > min_distance:
-        turn_to(direction, abs_x, abs_y)
-
-    pyautogui.hotkey("w", "s", "a", "d")
+        elif max_distance > distance > min_distance:
+            turn_to(direction, abs_x, abs_y)
+        pyautogui.hotkey("w", "s", "a", "d")
     return True
 
 
@@ -48,60 +67,76 @@ def move_to(distance, direction, abs_x, abs_y):
     t = 0.8
     if direction == "NW":
         if abs_x > abs_y:
-            if abs_y < 150:
+            if abs_y < 100:
                 pyautogui.keyDown("a")
                 time.sleep(distance / 400 * t)
+                pyautogui.keyUp("a")
                 return True
         else:
-            if abs_x < 150:
+            if abs_x < 100:
                 pyautogui.keyDown("w")
                 time.sleep(distance / 300 * t)
+                pyautogui.keyUp("w")
                 return True
         pyautogui.keyDown("w")
         pyautogui.keyDown("a")
         time.sleep(distance / 350 * t)
+        pyautogui.keyUp("w")
+        pyautogui.keyUp("a")
     if direction == "NE":
         if abs_x > abs_y:
-            if abs_y < 150:
+            if abs_y < 100:
                 pyautogui.keyDown("d")
                 time.sleep(distance / 400 * t)
+                pyautogui.keyUp("d")
                 return True
         else:
-            if abs_x < 150:
+            if abs_x < 100:
                 pyautogui.keyDown("w")
                 time.sleep(distance / 300 * t)
+                pyautogui.keyUp("w")
                 return True
         pyautogui.keyDown("w")
         pyautogui.keyDown("d")
         time.sleep(distance / 350 * t)
+        pyautogui.keyUp("w")
+        pyautogui.keyUp("d")
     if direction == "SW":
         if abs_x > abs_y:
-            if abs_y < 150:
+            if abs_y < 100:
                 pyautogui.keyDown("a")
                 time.sleep(distance / 300 * t)
+                pyautogui.keyUp("a")
                 return True
         else:
-            if abs_x < 150:
+            if abs_x < 100:
                 pyautogui.keyDown("s")
                 time.sleep(distance / 400 * t)
+                pyautogui.keyUp("s")
                 return True
         pyautogui.keyDown("s")
         pyautogui.keyDown("a")
         time.sleep(distance / 350 * t)
+        pyautogui.keyUp("s")
+        pyautogui.keyUp("a")
     if direction == "SE":
         if abs_x > abs_y:
-            if abs_y < 150:
+            if abs_y < 100:
                 pyautogui.keyDown("d")
                 time.sleep(distance / 400 * t)
+                pyautogui.keyUp("d")
                 return True
         else:
-            if abs_x < 150:
+            if abs_x < 100:
                 pyautogui.keyDown("s")
                 time.sleep(distance / 300 * t)
+                pyautogui.keyUp("s")
                 return True
         pyautogui.keyDown("s")
         pyautogui.keyDown("d")
         time.sleep(distance / 350 * t)
+        pyautogui.keyUp("s")
+        pyautogui.keyUp("d")
 
 
 def turn_to(direction, abs_x, abs_y):
@@ -143,11 +178,11 @@ def check_dir(dist_x, dist_y):
 
 def search_for_color(*color, attack_box):
     for c in color:
-        img = np.asarray(ImageGrab.grab(attack_box).convert('RGB'))
+        i = ImageGrab.grab(attack_box)
+        img = np.asarray(i.convert('RGB'))
         c = np.asarray(c)
-        result = np.where(np.all(img == c, axis=2))
+        result = np.where(np.all(img == c, axis=-1))
         if len(result[0] != 0):
-            print("not found")
             x, y = result[1][0] + attack_box[0], result[0][0] + attack_box[1]
             return x, y
     return False
@@ -162,6 +197,3 @@ def auto_loot(*items):
     for item in items:
         if check_box(item, use_box_coords):
             pyautogui.click(use_coords)
-
-
-

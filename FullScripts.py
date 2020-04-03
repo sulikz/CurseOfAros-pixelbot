@@ -1,4 +1,6 @@
 from threading import Thread
+
+from Attacker import attack
 from Potion import Potion
 from config import *
 
@@ -29,6 +31,22 @@ def farm_ancient_bats():
            min_distance=80,
            offset=80,
            search_box=ancient_bat_search_coords)
+
+
+def farm_luminant_slimes():
+    Player.use_item()
+    auto_heal(35, Potion.large.value)
+    auto_heal(random.uniform(50, 75), Potion.medium.value)
+    attack(luminant_slime_hit_1,
+           luminant_slime_1,
+           luminant_slime_2,
+           max_distance=100,
+           min_distance=80,
+           offset=0)
+
+
+def farm_ice_raptors():
+    single_enemy_farmer(ice_raptor_1)
 
 
 def farm_forest_fiends():

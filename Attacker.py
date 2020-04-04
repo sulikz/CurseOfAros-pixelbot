@@ -15,7 +15,8 @@ from Potion import Potion
 def single_enemy_farmer(color, max_distance=100, min_distance=80, offset=0, small_search_box=small_search_box_coords,
                         search_box=search_box_coords):
     i = 0
-    while i < 7:
+    dead = False
+    while i < 20 and not dead:
         if attack(color,
                   max_distance=max_distance,
                   min_distance=min_distance,
@@ -28,7 +29,10 @@ def single_enemy_farmer(color, max_distance=100, min_distance=80, offset=0, smal
         auto_heal(random.uniform(50, 75), Potion.medium.value)
         i += 1
         print(i)
-    anti_stuck()
+        if Player.check_if_dead():
+            pyautogui.keyUp('q')
+            return False
+    # anti_stuck()
     pyautogui.keyUp('q')
     Player.use_item()
     auto_heal(35, Potion.large.value)

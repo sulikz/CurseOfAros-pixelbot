@@ -23,10 +23,10 @@ def auto_bank_ore():
             pyautogui.click(last_item_coords)
         print("Ores transferred to bank.")
         close_bank()
-    else:
-        print("Could not open bank.")
-        print("Quitting...")
-        sys.exit()
+    # else:
+    #     print("Could not open bank.")
+    #     print("Quitting...")
+    #     sys.exit()
 
     return True
 

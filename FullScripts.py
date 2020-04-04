@@ -16,21 +16,7 @@ def farm_cave_bats():
     Player.use_item()
     auto_heal(random.uniform(45, 75), Potion.medium.value)
     auto_heal(25, Potion.large.value)
-    attack(cave_bat_color, 140, offset=100)
-
-
-def farm_ancient_bats():
-    Player.use_item()
-    auto_heal(35, Potion.large.value)
-    auto_heal(random.uniform(45, 75), Potion.medium.value)
-    attack(ancient_bat_hit_1,
-           ancient_bat_hit_2,
-           ancient_bat_1,
-           ancient_bat_hit_2,
-           max_distance=140,
-           min_distance=80,
-           offset=80,
-           search_box=ancient_bat_search_coords)
+    attack(cave_bat_color, 140, offset=110)
 
 
 def farm_luminant_slimes():
@@ -47,6 +33,18 @@ def farm_luminant_slimes():
 
 def farm_ice_raptors():
     single_enemy_farmer(ice_raptor_1)
+
+
+def farm_ancient_bats():
+    single_enemy_farmer(ancient_bat_1, max_distance=140, min_distance=80, offset=90)
+    # attack(ancient_bat_hit_1,
+    #        ancient_bat_hit_2,
+    #        ancient_bat_1,
+    #        ancient_bat_hit_2,
+    #        max_distance=140,
+    #        min_distance=80,
+    #        offset=80,
+    #        search_box=ancient_bat_search_coords)
 
 
 def farm_forest_fiends():
@@ -100,14 +98,14 @@ def mine_gold(m: Mover):
         # Suicide
         while not Player.check_if_dead():
             print("Suciding...")
-            attack(raptor_color, 140)
-            pyautogui.hotkey("w", "s", "a", "d")
+            single_enemy_farmer(raptor_color, max_distance=160, min_distance=100)
+            # pyautogui.hotkey("w", "s", "a", "d")
         # Release keys after attacking
-        pyautogui.keyUp("w")
-        pyautogui.keyUp("s")
-        pyautogui.keyUp("a")
-        pyautogui.keyUp("d")
-        # Move to bank
+        # pyautogui.keyUp("w")
+        # pyautogui.keyUp("s")
+        # pyautogui.keyUp("a")
+        # pyautogui.keyUp("d")
+        # Move to bankasa
         spawn_to_bank()
         # Deposit items
         auto_bank_ore()

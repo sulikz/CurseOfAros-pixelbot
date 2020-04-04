@@ -34,7 +34,7 @@ def auto_bank_ore():
 def click_item(item, quantity, location):
     for i in range(quantity):
         window = ImageGrab.grab(location)
-        found = pyautogui.locate(item, window)
+        found = pyautogui.locate(item, window, confidence=0.9)
         print(found)
         if found:
             x, y, w, h = found

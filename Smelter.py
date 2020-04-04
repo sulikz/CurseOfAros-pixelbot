@@ -58,10 +58,10 @@ def smelt_steel(bar_smelter_icon, bar_inventory_icon, ore_1, quantity_1, ore_2=N
     print("Waiting for bank icon to store items")
     while smelt_flag:
         if check_box(UI.UseIcon.value, use_box_coords):
-            time.sleep(random.uniform(0.1, 0.3))
+            time.sleep(random.uniform(0.3, 0.4))
             pyautogui.click(use_coords)
             smelt_flag = False
-    time.sleep(random.uniform(0.1, 0.3))
+    time.sleep(random.uniform(0.3, 0.4))
     stored_flag = store_item(bar_inventory_icon, smelt_quantity)
     if stored_flag:
         print("Smelting completed")

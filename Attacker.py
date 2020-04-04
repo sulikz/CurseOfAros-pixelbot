@@ -4,6 +4,7 @@ import time
 import numpy as np
 import pyautogui
 from PIL import ImageGrab
+from numpy.random.mtrand import randint
 
 from CheckBox import check_box
 from Coordinates import *
@@ -16,7 +17,7 @@ def single_enemy_farmer(color, max_distance=100, min_distance=80, offset=0, smal
                         search_box=search_box_coords):
     i = 0
     dead = False
-    while i < 20 and not dead:
+    while i < 7 and not dead:
         if attack(color,
                   max_distance=max_distance,
                   min_distance=min_distance,
@@ -28,7 +29,7 @@ def single_enemy_farmer(color, max_distance=100, min_distance=80, offset=0, smal
         auto_heal(35, Potion.large.value)
         auto_heal(random.uniform(50, 75), Potion.medium.value)
         i += 1
-        print(i)
+        # print(i)
         if Player.check_if_dead():
             pyautogui.keyUp('q')
             return False
@@ -63,7 +64,7 @@ def attack(*color, max_distance=120, min_distance=50, offset=0, search_box=searc
 
         elif max_distance > distance > min_distance:
             turn_to(direction, abs_x, abs_y)
-        pyautogui.hotkey("w", "s", "a", "d")
+        # pyautogui.hotkey("w", "s", "a", "d")
     return True
 
 
@@ -180,14 +181,18 @@ def check_dir(dist_x, dist_y):
     # if dist_x > 0 : W  || if dist_x < 0 : E
 
 
-def search_for_color(*color, attack_box):
+def search_for_color(*color, attack_box, random = False):
     for c in color:
         i = ImageGrab.grab(attack_box)
         img = np.asarray(i.convert('RGB'))
         c = np.asarray(c)
         result = np.where(np.all(img == c, axis=-1))
         if len(result[0] != 0):
-            x, y = result[1][0] + attack_box[0], result[0][0] + attack_box[1]
+            if random:
+                r = randint(len(result[0]))  # Randomizing enemy searching instead of prioritising top left -> bot right
+            else:
+                r = 0
+            x, y = result[1][r] + attack_box[0], result[0][r] + attack_box[1]
             return x, y
     return False
 

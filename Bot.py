@@ -26,18 +26,18 @@ class Bot(Thread):
                 # farm_rock_fiends()
                 # farm_luminant_slimes()
                 # farm_cave_bats()
-                # farm_ice_raptors()
+                farm_ice_raptors()
                 # farm_ancient_bats()
                 # farm_ice_fiends()
                 # farm_cave_bats()
 
-                # anti_stuck()
+                anti_stuck()
                 # mine_gold(self.m)
                 # mine_mythan()
 
                 # Auto smelt
                 # smelt_gold_nuggets()
-                smelt_gold_bar()
+                # smelt_gold_bar()
                 # if Player.check_if_dead():
                 #     self.running = False
                 if keyboard.is_pressed('f1') and self.running:

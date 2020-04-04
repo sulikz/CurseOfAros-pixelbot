@@ -14,7 +14,7 @@ from Potion import Potion
 
 
 def single_enemy_farmer(color, max_distance=100, min_distance=80, offset=0, small_search_box=small_search_box_coords,
-                        search_box=search_box_coords):
+                        search_box=search_box_coords, prioritisation=None):
     i = 0
     dead = False
     while i < 7 and not dead:
@@ -43,13 +43,13 @@ def single_enemy_farmer(color, max_distance=100, min_distance=80, offset=0, smal
            min_distance=min_distance,
            offset=offset,
            search_box=search_box,
-           random=True)
+           prioritisation=prioritisation)
     Player.use_item()
 
 
-def attack(*color, max_distance=120, min_distance=50, offset=0, search_box=search_box_coords, random=False):
+def attack(*color, max_distance=120, min_distance=50, offset=0, search_box=search_box_coords, prioritisation=None):
     # Look for color of enemy
-    enemy_coords = search_for_color(*color, attack_box=search_box, random=random)
+    enemy_coords = search_for_color(*color, attack_box=search_box, prioritisation=prioritisation)
     if not enemy_coords:
         return False
     else:
@@ -182,14 +182,14 @@ def check_dir(dist_x, dist_y):
     # if dist_x > 0 : W  || if dist_x < 0 : E
 
 
-def search_for_color(*color, attack_box, random=False):
+def search_for_color(*color, attack_box, prioritisation=None):
     for c in color:
         i = ImageGrab.grab(attack_box)
         img = np.asarray(i.convert('RGB'))
         c = np.asarray(c)
         result = np.where(np.all(img == c, axis=-1))
         if len(result[0] != 0):
-            if random:
+            if prioritisation == "random":
                 r = randint(len(result[0]))  # Randomizing enemy searching instead of prioritising top left -> bot right
             else:
                 r = 0

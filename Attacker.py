@@ -9,21 +9,19 @@ from numpy.random.mtrand import randint
 
 from CheckBox import check_box
 from Coordinates import *
+from Mobs import Entity
 from Mover import move_left, move_right, move_down, move_up, anti_stuck
 import Player
 from Potion import Potion
 
 
-def single_enemy_farmer(color, max_distance=100, min_distance=50, offset=0, small_search_box=small_search_box_coords,
+def single_enemy_farmer(*entity: Entity, small_search_box=small_search_box_coords,
                         search_box=search_box_coords, prioritisation=None):
     i = 0
     j = 0
     dead = False
     while i < 5 and j < 30 and not dead:
-        if attack(color,
-                  max_distance=max_distance,
-                  min_distance=min_distance,
-                  offset=offset,
+        if attack(entity,
                   search_box=small_search_box):
             pyautogui.keyDown('q')
             i = 0
@@ -44,10 +42,7 @@ def single_enemy_farmer(color, max_distance=100, min_distance=50, offset=0, smal
     auto_heal(35, Potion.large.value)
     auto_heal(random.uniform(50, 75), Potion.medium.value)
     if i >= 5:
-        attack(color,
-               max_distance=max_distance,
-               min_distance=min_distance,
-               offset=offset,
+        attack(entity,
                search_box=search_box,
                prioritisation=prioritisation)
     if j >= 30:
@@ -56,25 +51,25 @@ def single_enemy_farmer(color, max_distance=100, min_distance=50, offset=0, smal
     return True
 
 
-def attack(*color, max_distance=120, min_distance=50, offset=0, search_box=search_box_coords, prioritisation=None):
+def attack(*entity: Entity, search_box=search_box_coords, prioritisation=None):
     # Look for color of enemy
-    enemy_coords = search_for_color(*color, attack_box=search_box, prioritisation=prioritisation)
-    if not enemy_coords:
-        return False
-    else:
-        dist_x = player_coords[0] - enemy_coords[0]
-        dist_y = player_coords[1] - enemy_coords[1] - offset
-        abs_x = abs(player_coords[0] - enemy_coords[0])
-        abs_y = abs(player_coords[1] - enemy_coords[1])
+    for e in entity:
+        enemy_coords = search_for_color(e, attack_box=search_box, prioritisation=prioritisation)
+        if not enemy_coords:
+            break
+        else:
+            dist_x = player_coords[0] - enemy_coords[0]
+            dist_y = player_coords[1] - enemy_coords[1] - e.offset
+            abs_x = abs(player_coords[0] - enemy_coords[0])
+            abs_y = abs(player_coords[1] - enemy_coords[1])
 
-        distance = np.sqrt(pow(dist_x, 2) + pow(dist_y, 2))
-        direction = check_dir(dist_x, dist_y)
-        if distance > max_distance:
-            move_to(distance, direction, abs_x, abs_y)
+            distance = np.sqrt(pow(dist_x, 2) + pow(dist_y, 2))
+            direction = check_dir(dist_x, dist_y)
+            if distance > e.max_distance:
+                move_to(distance, direction, abs_x, abs_y)
 
-        elif max_distance > distance > min_distance:
-            turn_to(direction, abs_x, abs_y)
-        # pyautogui.hotkey("w", "s", "a", "d")
+            elif e.max_distance > distance > e.min_distance:
+                turn_to(direction, abs_x, abs_y)
     return True
 
 
@@ -191,20 +186,19 @@ def check_dir(dist_x, dist_y):
     # if dist_x > 0 : W  || if dist_x < 0 : E
 
 
-def search_for_color(*color, attack_box, prioritisation=None):
-    for c in color:
-        i = ImageGrab.grab(attack_box)
-        img = np.asarray(i.convert('RGB'))
-        c = np.asarray(c)
-        result = np.where(np.all(img == c, axis=-1))
-        if len(result[0] != 0):
-            if prioritisation == "random":
-                print('yes')
-                r = randint(len(result[0]))  # Randomizing enemy searching instead of prioritising top left -> bot right
-            else:
-                r = 0
-            x, y = result[1][r] + attack_box[0], result[0][r] + attack_box[1]
-            return x, y
+def search_for_color(color, attack_box, prioritisation=None):
+    i = ImageGrab.grab(attack_box)
+    img = np.asarray(i.convert('RGB'))
+    c = np.asarray(color)
+    result = np.where(np.all(img == c, axis=-1))
+    if len(result[0] != 0):
+        if prioritisation == "random":
+            print('yes')
+            r = randint(len(result[0]))  # Randomizing enemy searching instead of prioritising top left -> bot right
+        else:
+            r = 0
+        x, y = result[1][r] + attack_box[0], result[0][r] + attack_box[1]
+        return x, y
     return False
 
 

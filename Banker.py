@@ -16,17 +16,12 @@ def auto_bank_ore():
         time.sleep(0.1)
         pyautogui.click(use_coords)
         time.sleep(0.2)
-        print("Checking item in last slot...")
-        while not check_box(UI.Last_item_box.value, last_item_box_coords):
+        print("Depositing item in last slot...")
+        for _ in range(36):
             time.sleep(random.uniform(0.01, 0.1))
-            print("Depositing last item.")
             pyautogui.click(last_item_coords)
         print("Ores transferred to bank.")
         close_bank()
-    # else:
-    #     print("Could not open bank.")
-    #     print("Quitting...")
-    #     sys.exit()
 
     return True
 

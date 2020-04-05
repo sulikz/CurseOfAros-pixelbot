@@ -1,7 +1,10 @@
 import time
+from threading import Thread
 
 from FullScripts import *
 import keyboard
+
+from Mover import anti_stuck
 
 
 class Bot(Thread):
@@ -27,14 +30,14 @@ class Bot(Thread):
                 # farm_luminant_slimes()
                 # farm_cave_bats()
                 # farm_ice_raptors()
-                if not farm_rock_fiends():
-                    print("Exiting")
+                # if not single_enemy_farmer():
+                #     print("Exiting")
                     # sys.exit()
                 # farm_ice_fiends()
                 # farm_cave_bats()
 
-                anti_stuck()
-                # mine_gold(self.m)
+                # anti_stuck()
+                mine_gold(self.m)
                 # mine_mythan()
 
                 # Auto smelt

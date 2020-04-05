@@ -32,11 +32,11 @@ def farm_luminant_slimes():
 
 
 def farm_ice_raptors():
-    single_enemy_farmer(ice_raptor_1)
+    single_enemy_farmer(ice_raptor_1, min_distance=70)
 
 
 def farm_ancient_bats():
-    single_enemy_farmer(ancient_bat_1, max_distance=140, min_distance=80, offset=90)
+    return single_enemy_farmer(ancient_bat_1, max_distance=140, min_distance=80, offset=90, prioritisation="random")
     # attack(ancient_bat_hit_1,
     #        ancient_bat_hit_2,
     #        ancient_bat_1,
@@ -55,10 +55,11 @@ def farm_forest_fiends():
 
 
 def farm_rock_fiends():
-    Player.use_item()
-    auto_heal(25, Potion.large.value)
-    auto_heal(random.uniform(50, 75), Potion.medium.value)
-    attack(rock_fiend, rock_fiend_hit, 140, min_distance=80, offset=50)
+    return single_enemy_farmer(rock_fiend, max_distance=140, min_distance=80, offset=50)
+    # Player.use_item()
+    # auto_heal(25, Potion.large.value)
+    # auto_heal(random.uniform(50, 75), Potion.medium.value)
+    # attack(rock_fiend, rock_fiend_hit, 140, min_distance=80, offset=50)
 
 
 def farm_ice_fiends():

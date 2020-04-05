@@ -26,8 +26,10 @@ class Bot(Thread):
                 # farm_rock_fiends()
                 # farm_luminant_slimes()
                 # farm_cave_bats()
-                farm_ice_raptors()
-                # farm_ancient_bats()
+                # farm_ice_raptors()
+                if not farm_rock_fiends():
+                    print("Exiting")
+                    # sys.exit()
                 # farm_ice_fiends()
                 # farm_cave_bats()
 

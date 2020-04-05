@@ -1,4 +1,5 @@
 import random
+import sys
 import time
 
 import numpy as np
@@ -13,11 +14,12 @@ import Player
 from Potion import Potion
 
 
-def single_enemy_farmer(color, max_distance=100, min_distance=80, offset=0, small_search_box=small_search_box_coords,
+def single_enemy_farmer(color, max_distance=100, min_distance=50, offset=0, small_search_box=small_search_box_coords,
                         search_box=search_box_coords, prioritisation=None):
     i = 0
+    j = 0
     dead = False
-    while i < 7 and not dead:
+    while i < 5 and j < 30 and not dead:
         if attack(color,
                   max_distance=max_distance,
                   min_distance=min_distance,
@@ -25,26 +27,33 @@ def single_enemy_farmer(color, max_distance=100, min_distance=80, offset=0, smal
                   search_box=small_search_box):
             pyautogui.keyDown('q')
             i = 0
+            j += 1
         Player.use_item()
         auto_heal(35, Potion.large.value)
         auto_heal(random.uniform(50, 75), Potion.medium.value)
         i += 1
-        # print(i)
+        print("i {} j {} ".format(i, j))
         if Player.check_if_dead():
             pyautogui.keyUp('q')
             return False
+        if Player.check_if_exp():
+            j = 0
     # anti_stuck()
     pyautogui.keyUp('q')
     Player.use_item()
     auto_heal(35, Potion.large.value)
     auto_heal(random.uniform(50, 75), Potion.medium.value)
-    attack(color,
-           max_distance=max_distance,
-           min_distance=min_distance,
-           offset=offset,
-           search_box=search_box,
-           prioritisation=prioritisation)
+    if i >= 5:
+        attack(color,
+               max_distance=max_distance,
+               min_distance=min_distance,
+               offset=offset,
+               search_box=search_box,
+               prioritisation=prioritisation)
+    if j >= 30:
+        sys.exit()
     Player.use_item()
+    return True
 
 
 def attack(*color, max_distance=120, min_distance=50, offset=0, search_box=search_box_coords, prioritisation=None):
@@ -190,6 +199,7 @@ def search_for_color(*color, attack_box, prioritisation=None):
         result = np.where(np.all(img == c, axis=-1))
         if len(result[0] != 0):
             if prioritisation == "random":
+                print('yes')
                 r = randint(len(result[0]))  # Randomizing enemy searching instead of prioritising top left -> bot right
             else:
                 r = 0

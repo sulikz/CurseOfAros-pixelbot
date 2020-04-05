@@ -15,11 +15,11 @@ class Raptor(RaptorEntity):
 
     def __init__(self):
         super().__init__()
-        self.color = (132, 40, 49)
+        self.color = [(132, 40, 49)]
 
 
 class IceRaptor(RaptorEntity):
 
     def __init__(self):
         super().__init__()
-        self.color = (33, 48, 82)
+        self.color = [(33, 48, 82)]

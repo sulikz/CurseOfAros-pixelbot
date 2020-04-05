@@ -15,4 +15,4 @@ class LuminantSlime(SlimeEntity):
 
     def __init__(self):
         super().__init__()
-        self.color = (0, 227, 214)
+        self.color = [(0, 227, 214)]

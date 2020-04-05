@@ -15,18 +15,34 @@ class ForestFiend(FiendEntity):
 
     def __init__(self):
         super().__init__()
-        self.color = (99, 56, 49)
+        self.color = [(99, 56, 49)]
 
 
 class IceFiend(FiendEntity):
 
     def __init__(self):
         super().__init__()
-        self.color = (90, 121, 148)
+        self.color = [(90, 121, 148)]
 
 
 class RockFiend(FiendEntity):
 
     def __init__(self):
         super().__init__()
-        self.color = (66, 40, 57)
+        self.color = [(66, 40, 57)]
+
+
+class SpectralFiend(FiendEntity):
+
+    def __init__(self):
+        super().__init__()
+        self.min_distance = 90
+        self.color = [(156, 52, 189), (156, 113, 189)]
+
+
+class PhantomFiend(FiendEntity):
+
+    def __init__(self):
+        super().__init__()
+        self.min_distance = 90
+        self.color = [(49, 158, 181), (49, 158, 173), (99, 174, 173)]

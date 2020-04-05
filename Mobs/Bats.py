@@ -15,18 +15,18 @@ class Bat(BatEntity):
 
     def __init__(self):
         super().__init__()
-        self.color = (222, 207, 57)
+        self.color = [(222, 207, 57)]
 
 
 class CaveBat(BatEntity):
 
     def __init__(self):
         super().__init__()
-        self.color = (181, 142, 82)
+        self.color = [(181, 142, 82)]
 
 
 class AncientBat(BatEntity):
 
     def __init__(self):
         super().__init__()
-        self.color = (57, 56, 82)
+        self.color = [(57, 56, 82)]

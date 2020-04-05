@@ -9,8 +9,8 @@ from Banker import auto_bank_ore
 from Coal_waypoints import move_to_wp0, move_to_random_wp
 from FilePaths import Ores
 from Miner import miner
-from Mobs import Fiend, Raptor
-from Mobs.Fiend import RockFiend
+from Mobs.Fiends import RockFiend
+from Mobs.Raptors import Raptor
 from Mover import spawn_to_bank, bank_to_mythan, Mover, bank_to_gold, coal_to_bank, bank_to_coal
 
 
@@ -45,7 +45,7 @@ def mine_gold(m: Mover):
         # Suicide
         while not Player.check_if_dead():
             print("Suciding...")
-            single_enemy_farmer(Raptor)
+            single_enemy_farmer(Raptor())
         # Move to banka
         spawn_to_bank()
         # Deposit items

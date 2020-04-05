@@ -16,7 +16,7 @@ class Mover:
         r = random.uniform(0, 1)
         move_down(1.1 - r, release=False)
         move_right(0.25)
-        move_down(2.2 + r)
+        move_down(2.3 + r)
         move_right(0.6)
         self.current_wp = 1
 

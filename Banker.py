@@ -13,9 +13,9 @@ from FilePaths import UI
 def auto_bank_ore():
     print("Waiting for bank...")
     if check_box(UI.UseIcon.value, use_box_coords):
-        time.sleep(0.1)
+        time.sleep(0.4)
         pyautogui.click(use_coords)
-        time.sleep(0.2)
+        time.sleep(0.4)
         print("Depositing item in last slot...")
         for _ in range(36):
             time.sleep(random.uniform(0.01, 0.1))

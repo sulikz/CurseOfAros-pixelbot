@@ -7,11 +7,11 @@ import pyautogui
 from PIL import ImageGrab
 from numpy.random.mtrand import randint
 
+import Player
 from CheckBox import check_box
 from Coordinates import *
 from Mobs import Entity
-from Mover import move_left, move_right, move_down, move_up, anti_stuck
-import Player
+from Mover import move_left, move_right, move_down, move_up
 from Potion import Potion
 
 
@@ -21,7 +21,7 @@ def single_enemy_farmer(*entity: Entity, small_search_box=small_search_box_coord
     j = 0
     dead = False
     while i < 5 and j < 30 and not dead:
-        if attack(entity,
+        if attack(*entity,
                   search_box=small_search_box):
             pyautogui.keyDown('q')
             i = 0
@@ -42,7 +42,7 @@ def single_enemy_farmer(*entity: Entity, small_search_box=small_search_box_coord
     auto_heal(35, Potion.large.value)
     auto_heal(random.uniform(50, 75), Potion.medium.value)
     if i >= 5:
-        attack(entity,
+        attack(*entity,
                search_box=search_box,
                prioritisation=prioritisation)
     if j >= 30:
@@ -54,7 +54,7 @@ def single_enemy_farmer(*entity: Entity, small_search_box=small_search_box_coord
 def attack(*entity: Entity, search_box=search_box_coords, prioritisation=None):
     # Look for color of enemy
     for e in entity:
-        enemy_coords = search_for_color(e, attack_box=search_box, prioritisation=prioritisation)
+        enemy_coords = search_for_color(e.color, attack_box=search_box, prioritisation=prioritisation)
         if not enemy_coords:
             break
         else:
@@ -70,7 +70,8 @@ def attack(*entity: Entity, search_box=search_box_coords, prioritisation=None):
 
             elif e.max_distance > distance > e.min_distance:
                 turn_to(direction, abs_x, abs_y)
-    return True
+        return True
+    return False
 
 
 def move_to(distance, direction, abs_x, abs_y):

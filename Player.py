@@ -23,6 +23,16 @@ def drink_potion(potion):
         pyautogui.hotkey('3')
 
 
+def check_full_inventory():
+    img = np.array(ImageGrab.grab(inv_full_box_coords).convert('RGB'))
+    r, g, b = img[0][0]
+    if r == 255 and g == 255 and b == 0:
+        print("Inventory full. Go to bank.")
+        return True
+    else:
+        return False
+
+
 def check_if_dead():
     img = np.array(ImageGrab.grab(player_dead_coords).convert('RGB'))
     r, g, b = img[0][0]
@@ -50,7 +60,7 @@ def check_if_exp():
     yellow = np.asarray((255, 255, 0))
     result = np.where(np.all(img == yellow, axis=-1))
     if len(result[0] != 0):
-            print('killed')
-            return True
+        print('killed')
+        return True
     else:
         return False

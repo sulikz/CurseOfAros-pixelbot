@@ -1,10 +1,12 @@
 import time
 from threading import Thread
 
+from Attacker import auto_heal
 from FullScripts import *
 import keyboard
 
 from Mover import anti_stuck
+from Potion import Potion
 
 
 class Bot(Thread):
@@ -19,7 +21,8 @@ class Bot(Thread):
     def run(self):
         # use_box = ImageGrab.grab(small_search_box_coords)
         # use_box.show()
-        # bank_to_gold()
+        time.sleep(2)
+        bank_to_gold()
         while True:
             if keyboard.is_pressed('f1') and not self.running:
                 self.running = True
@@ -35,6 +38,8 @@ class Bot(Thread):
                     # sys.exit()
                 # farm_ice_fiends()
                 # farm_cave_bats()
+                # auto_heal(35, Potion.large.value)
+                # auto_heal(random.uniform(50, 75), Potion.medium.value)
 
                 # anti_stuck()
                 mine_gold(self.m)

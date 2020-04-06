@@ -5,6 +5,7 @@ import numpy as np
 import pyautogui
 from PIL import ImageGrab
 
+import Player
 from CheckBox import check_box
 from Coordinates import *
 
@@ -22,7 +23,7 @@ def miner(ore):
         ore_depleted = check_ore_status()
 
         # Check if inventory is full
-        full_inventory = check_full_inventory()
+        full_inventory = Player.check_full_inventory()
 
     return full_inventory, ore_depleted
 
@@ -36,16 +37,6 @@ def mine_ore(ore):
         return False
     else:
         return True
-
-
-def check_full_inventory():
-    img = np.array(ImageGrab.grab(inv_full_box_coords).convert('RGB'))
-    r, g, b = img[0][0]
-    if r == 255 and g == 255 and b == 0:
-        print("Inventory full. Go to bank.")
-        return True
-    else:
-        return False
 
 
 def check_ore_status():

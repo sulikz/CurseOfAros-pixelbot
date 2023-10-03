@@ -1,6 +1,6 @@
 # CurseOfAros-pixelbot
 
-UPDATE: outdated, but you can look it up for reference
+UPDATE: Not finished and outdated, but you can look it up for reference
 
 
 This is an image recognition bot for Curse of Aros mobile game. It is intended to use with Bluestacks emulator.
